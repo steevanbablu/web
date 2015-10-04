@@ -11,28 +11,57 @@ var w=window.innerWidth;
 var h=window.innerHeight;
 var canvas=x;
 var ctx=canvas.getContext('2d');
-function drawSun(){
+function draw(){
 canvas.width=w;
 canvas.height=h;
-w=w/2;
-h=h/2;
-ctx.shadowBlur=100;
-ctx.shadowColor="white";
-var grd=ctx.createRadialGradient(w,h,h/14,w,h,h/2);
+w=w/2;h=h/2;
+//ctx.shadowBlur=30;
+//ctx.shadowColor="white";
+}
+function drawSun(){
+var grd=ctx.createRadialGradient(w,h,h/8,w,h,h/2);
 grd.addColorStop(0,"yellow");
 grd.addColorStop(1,"red");
 ctx.fillStyle=grd;
 ctx.beginPath();
 ctx.arc(w,h,h/2,0,2*Math.PI,true);
 ctx.fill();
+ctx.beginPath();
+ctx.arc(w,h,h*0.8,0,2*Math.PI);
+ctx.strokeStyle='white';
+ctx.stroke();
+//ctx.save();
+}
+function drawEarth(){
+ctx.clearRect(0,0,2*w,2*h);
+drawSun();
+ctx.translate(w,h);
+var time=new Date();
+//var second=now.getSeconds();
+var ang;
+//ang=second*Math.PI/30;
+ang=((2*Math.PI)/60)*time.getSeconds() + ((2*Math.PI)/60000)*time.getMilliseconds();
+ctx.rotate(ang);
+ctx.translate(0,-h*0.8);
+ctx.rotate(-ang);
+ctx.beginPath();
+ctx.arc(0,0,h/8,0,2*Math.PI);
+ctx.fillStyle='blue';
+ctx.fill();
+ctx.rotate(ang);
+ctx.translate(0,h*0.8);
+ctx.rotate(-ang);
+ctx.translate(-w,-h);
+window.requestAnimationFrame(drawEarth);
 }
 window.addEventListener('resize',resize,false);
 function resize() {
 	w = window.innerWidth;
 	h = window.innerHeight;
-	drawSun();
+	draw();
 }
-drawSun();
+draw();
+window.requestAnimationFrame(drawEarth);
 </script>
 </body>
 </html>
