@@ -11,14 +11,14 @@ var w=window.innerWidth;
 var h=window.innerHeight;
 var canvas=x;
 var ctx=canvas.getContext('2d');
+ctx.save();
 function draw(){
 canvas.width=w;
 canvas.height=h;
 w=w/2;h=h/2;
-//ctx.shadowBlur=30;
-//ctx.shadowColor="white";
 }
 function drawSun(){
+ctx.save();
 var grd=ctx.createRadialGradient(w,h,h/8,w,h,h/2);
 grd.addColorStop(0,"yellow");
 grd.addColorStop(1,"red");
@@ -26,11 +26,13 @@ ctx.fillStyle=grd;
 ctx.beginPath();
 ctx.arc(w,h,h/2,0,2*Math.PI,true);
 ctx.fill();
+ctx.shadowBlur=30;
+ctx.shadowColor="white";
 ctx.beginPath();
 ctx.arc(w,h,h*0.8,0,2*Math.PI);
 ctx.strokeStyle='white';
 ctx.stroke();
-//ctx.save();
+ctx.save();
 }
 function drawEarth(){
 ctx.clearRect(0,0,2*w,2*h);
@@ -43,11 +45,16 @@ var ang;
 ang=((2*Math.PI)/60)*time.getSeconds() + ((2*Math.PI)/60000)*time.getMilliseconds();
 ctx.rotate(ang);
 ctx.translate(0,-h*0.8);
-ctx.rotate(-ang);
+//ctx.rotate(-ang);
+var gr=ctx.createRadialGradient(0,h/15,h/20,0,0,h/8);
+gr.addColorStop(0,'#E0F5FF');
+gr.addColorStop(1,'#5CB8E6');
 ctx.beginPath();
 ctx.arc(0,0,h/8,0,2*Math.PI);
-ctx.fillStyle='blue';
+ctx.fillStyle=gr;
 ctx.fill();
+
+ctx.rotate(-ang);
 ctx.rotate(ang);
 ctx.translate(0,h*0.8);
 ctx.rotate(-ang);
